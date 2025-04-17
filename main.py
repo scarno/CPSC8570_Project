@@ -87,7 +87,7 @@ def main():
 
         aggregated = krum_aggregation(updates, f=1)
         if dp_enabled:
-            aggregated = differentially_private_aggregation(aggregated, clipping_norm, dp_std)
+            aggregated = differentially_private_aggregation(aggregated, dp_clip, dp_std)
 
         global_model.update_parameters(aggregated)
         acc = validate_model(global_model, val_loader)
