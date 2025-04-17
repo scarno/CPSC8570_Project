@@ -11,7 +11,7 @@ import torch
 from utils.cross_validation import validate_model
 from models.federated_model import FederatedModel
 from defenses.robust_aggregation import krum_aggregation
-from defenses.differential_privacy import add_dp_noise
+from defenses.differential_privacy import differentially_private_aggregation
 from defenses.reputation_system import ReputationSystem
 from defenses.monitoring import monitor_performance
 from attacks import label_flipping, backdoor_attack, data_injection
@@ -86,7 +86,7 @@ def main():
 
         aggregated = krum_aggregation(updates, f=1)
         if dp_enabled:
-            aggregated = add_dp_noise(aggregated, dp_std)
+            aggregated = differentially_private_aggregation(aggregated, clipping_norm=1.0, dp_std)
 
         global_model.update_parameters(aggregated)
         acc = validate_model(global_model, val_loader)
