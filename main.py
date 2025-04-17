@@ -58,7 +58,7 @@ def main():
     rounds = config['rounds']
     dp_enabled = config['defenses']['differential_privacy']
     dp_std = config['defenses'].get('dp_std', 0.1)
-    dp_clip = config['defenses'].get('dp_std', 0.1)
+    dp_clip = config['defenses'].get('dp_clip', 0.1)
 
     client_loaders, val_loader, input_size = load_dataset(config['dataset'], num_clients)
     global_model = FederatedModel(input_dim=input_size, output_dim=10)
@@ -87,7 +87,10 @@ def main():
 
         aggregated = krum_aggregation(updates, f=1)
         if dp_enabled:
+            print("dp_clip:", dp_clip)
+            print("dp_std:", dp_std)
             aggregated = differentially_private_aggregation(aggregated, dp_clip, dp_std)
+            print("Differentially private aggregated update shape:", aggregated.shape)
 
         global_model.update_parameters(aggregated)
         acc = validate_model(global_model, val_loader)
