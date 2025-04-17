@@ -87,8 +87,6 @@ def main():
 
         aggregated = krum_aggregation(updates, f=1)
         if dp_enabled:
-            print("dp_clip:", dp_clip)
-            print("dp_std:", dp_std)
             aggregated = differentially_private_aggregation(aggregated, dp_clip, dp_std)
             print("Differentially private aggregated update shape:", aggregated.shape)
 

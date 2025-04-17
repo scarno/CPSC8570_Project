@@ -21,7 +21,7 @@ def add_dp_noise(update, clipping_norm, noise_std=0.1):
 
     Parameters:
       update (np.array): Aggregated update.
-      noise_std (float): Standard deviation of the Gaussian noise.
+      clipping_norm (float): Max L2 norm for each individual update.noise_std (float): Standard deviation of the Gaussian noise.
       
     Returns:
       np.array: Noisy update.
