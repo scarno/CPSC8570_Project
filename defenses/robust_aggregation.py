@@ -12,7 +12,7 @@ def krum_aggregation(updates, f=1):
 
     Parameters:
       updates (list of np.array): List of client updates.
-      f (int): Number of Byzantine (malicious) updates tolerated.
+      f (int): Number of Byzantine (malicious) updates tolerated. If the function is called without an argument, then the default value of 1 will be used.
       
     Returns:
       np.array: Aggregated update.
