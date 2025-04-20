@@ -102,8 +102,8 @@ def main():
             weight = reputation.get_trust(cid)
             updates.append(weight * update)
         
-        # Simple averaging instead of Krum
-        aggregated = sum(updates) / len(updates)
+        #Krum aggregation that selects a client update that is closest to the majority of other updates, which filters out malicious outliers
+        aggregated = krum_aggregation(updates)
         
         if dp_enabled:
             differentially_private_aggregation(aggregated, dp_clip, dp_std)
