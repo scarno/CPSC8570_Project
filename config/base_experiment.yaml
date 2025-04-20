@@ -2,7 +2,7 @@ experiment_name: "baseline_fl_demo"
 num_clients: 50 #og is 100
 num_attackers: 5
 rounds: 10 #og is 100
-dataset: "CIFAR10"
+dataset: "CIFAR10" # options: CIFAR10 or FashionMNIST
 model: "SimpleCNN"
 attacks:
   - type: "label_flipping"
