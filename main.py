@@ -84,45 +84,20 @@ def main():
         updates = []
         for cid, loader in enumerate(client_loaders):
             # Apply attacks to the data before training for malicious clients
+            current_loader = loader
+            
             if cid < num_attackers:
                 attack_type = config['attacks'][0]['type']
                 if attack_type == 'label_flipping':
                     source_class = config['attacks'][0].get('source_class')
                     target_class = config['attacks'][0].get('target_class')
                     
-                    # Simple but effective label flipping implementation
-                    subset = loader.dataset
-                    dataset = subset.dataset
-                    indices = subset.indices
+                    current_loader = label_flipping.poison_client_data(
+                        loader, source_class=source_class, target_class=target_class)
                     
-                    # Count flips for logging
-                    flipped = 0
-                    
-                    # Create a temporary dataset with flipped labels for training
-                    targets_copy = dataset.targets.clone() if isinstance(dataset.targets, torch.Tensor) else dataset.targets.copy()
-                    original_targets = dataset.targets
-                    dataset.targets = targets_copy  # Use the copy for this round
-                    
-                    # Apply flipping
-                    for idx in indices:
-                        if dataset.targets[idx] == source_class:
-                            dataset.targets[idx] = target_class
-                            flipped += 1
-                    
-                    print(f"Label flipping: changed {flipped} instances from class {source_class} to {target_class}")
                     print(f"Client {cid}: {attack_type} attack applied (flipping class {source_class} to {target_class}).")
-                    
-                    # Train with poisoned data
-                    update = global_model.train_on_client(loader)
-                    
-                    # Restore original targets for the next round
-                    dataset.targets = original_targets
-                else:
-                    # Handle other attack types
-                    update = global_model.train_on_client(loader)
-            else:
-                update = global_model.train_on_client(loader)
             
+            update = global_model.train_on_client(current_loader)
             weight = reputation.get_trust(cid)
             updates.append(weight * update)
         
