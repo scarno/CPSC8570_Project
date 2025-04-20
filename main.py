@@ -135,10 +135,18 @@ def main():
         
         global_model.update_parameters(aggregated)
         
-        metrics = validate_model(global_model, val_loader)
+        metrics = validate_model(global_model, val_loader, dataset_name=config['dataset'])
+
         print(f"Validation Accuracy: {metrics['accuracy']:.4f}")
-        print(f"Source class recall: {metrics['source_class_recall']:.4f}")
-        print(f"Misclassification rate from source to target: {metrics['source_to_target_rate']:.4f}")
+
+        # Only print source class recall if it makes sense
+        if metrics['source_class_recall'] is not None:
+            print(f"Source class (ID {metrics['source_class_id']}) recall: {metrics['source_class_recall']:.4f}")
+
+        # Only print source-to-target misclassification if it makes sense
+        if metrics['source_to_target_rate'] is not None:
+            print(f"Misclassification rate from class {metrics['source_class_id']} to {metrics['target_class_id']}: {metrics['source_to_target_rate']:.4f}")
+
         
         log.append({
             'round': rnd + 1, 
