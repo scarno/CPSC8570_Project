@@ -5,7 +5,7 @@ import torch
 from utils.cross_validation import validate_model
 from models.federated_model import FederatedModel
 from defenses.robust_aggregation import krum_aggregation
-from defenses.differential_privacy import add_dp_noise
+from defenses.differential_privacy import differentially_private_aggregation
 from defenses.reputation_system import ReputationSystem
 from defenses.monitoring import monitor_performance
 from attacks import label_flipping
@@ -53,10 +53,10 @@ def main():
     rounds = config['rounds']
     dp_enabled = config['defenses']['differential_privacy']
     dp_std = config['defenses'].get('dp_std', 0.1)
+    dp_clip = config['defenses'].get('dp_clip', 0.1)
     
     # Load the full dataset but don't distribute yet
     train_dataset, val_loader, input_channels = load_dataset(config['dataset'], num_clients)
-    
     global_model = FederatedModel(input_channels=input_channels, output_dim=10)
     reputation = ReputationSystem(num_clients)
     log = []
@@ -129,8 +129,8 @@ def main():
         aggregated = sum(updates) / len(updates)
         
         if dp_enabled:
-            aggregated = add_dp_noise(aggregated, dp_std)
-        
+            aggregated = differentially_private_aggregation(aggregated, dp_clip, dp_std)
+            print("Differentially private aggregated update shape:", aggregated.shape)
         global_model.update_parameters(aggregated)
         
         metrics = validate_model(global_model, val_loader)
