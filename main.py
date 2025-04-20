@@ -57,6 +57,7 @@ def main():
     
     # Load the full dataset but don't distribute yet
     train_dataset, val_loader, input_channels = load_dataset(config['dataset'], num_clients)
+    
     global_model = FederatedModel(input_channels=input_channels, output_dim=10)
     reputation = ReputationSystem(num_clients)
     log = []
@@ -129,8 +130,9 @@ def main():
         aggregated = sum(updates) / len(updates)
         
         if dp_enabled:
-            aggregated = differentially_private_aggregation(aggregated, dp_clip, dp_std)
+            differentially_private_aggregation(aggregated, dp_clip, dp_std)
             print("Differentially private aggregated update shape:", aggregated.shape)
+        
         global_model.update_parameters(aggregated)
         
         metrics = validate_model(global_model, val_loader)
