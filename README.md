@@ -5,7 +5,6 @@ FL Project improvements for CPSC 8570
 
 This repository is an enhanced implementation of federated learning under data poisoning attacks. It builds on prior work by incorporating these improvements:
 
-- **Diversified Attack Scenarios:** In addition to label-flipping, includes backdoor and data injection attacks.
 - **Robust Aggregation:** Implements Byzantine-robust aggregation using the Krum algorithm.
 - **Differential Privacy:** Adds Gaussian noise to aggregated updates.
 - **Regularization & Cross-Validation:** Uses regularization and cross-validation to mitigate overfitting and detect anomalies.
@@ -43,17 +42,20 @@ This repository is an enhanced implementation of federated learning under data p
    ```
 
 4. **Run the Experiment:**
+   Use the Experiment Runner:
+   `python experiments/run_experiment.py --config config/base_experiment.yaml`
+   
+   -OR-
+
    From the project root:
    `python main.py --config config/base_experiment.yaml`
 
-   -OR-
-
-   Use the Experiment Runner:
-   `python experiments/run_experiment.py --config config/base_experiment.yaml`
-
-6. **View Results:**
+5. **View Results:**
    A CSV log of round-wise accuracy will be saved to:
    `logs/metrics.csv`
+   
+   In order to generate a visual plot of the results, run:
+   `python visuals/plot_metrics.py`
 
 ## Notes
 
