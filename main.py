@@ -136,7 +136,7 @@ def main():
         monitor_performance(rnd,metrics['accuracy'],monitor_threshold)
     
     os.makedirs(config['logging']['output_dir'], exist_ok=True)
-    log_path = os.path.join(config['logging']['output_dir'], 'metrics.csv')
+    log_path = os.path.join(config['logging']['output_dir'], 'metrics','_',config['dataset'],'.csv')
     pd.DataFrame(log).to_csv(log_path, index=False)
     print(f"Saved metrics to {log_path}")
 
