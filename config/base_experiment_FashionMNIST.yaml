@@ -1,0 +1,19 @@
+experiment_name: "baseline_fl_demo"
+num_clients: 100 #og is 100
+num_attackers: 10 #og is 10
+rounds: 100 #og is 100
+dataset: "FashionMNIST" # options: CIFAR10 or FashionMNIST
+model: "SimpleCNN"
+attacks:
+  - type: "label_flipping"
+    source_class: 4 # cifar is 0 but fashion is 4 (coat)
+    target_class: 6 # cifar is 2 but fashion is 6 (shirt)
+defenses:
+  aggregation: "krum"
+  differential_privacy: true
+  dp_std: 0.1
+  dp_clip: 1.0
+  trust_system: true
+  monitor_threshold: 0.4
+logging:
+  output_dir: "logs/"
