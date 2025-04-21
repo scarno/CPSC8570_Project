@@ -54,6 +54,7 @@ def main():
     dp_enabled = config['defenses']['differential_privacy']
     dp_std = config['defenses'].get('dp_std', 0.1)
     dp_clip = config['defenses'].get('dp_clip', 0.1)
+    monitor_threshold = config['defenses'].get('monitor_threshold', 0.4)
     
     # Load the full dataset but don't distribute yet
     train_dataset, val_loader, input_channels = load_dataset(config['dataset'], num_clients)
@@ -101,8 +102,8 @@ def main():
             weight = reputation.get_trust(cid)
             updates.append(weight * update)
         
-        # Simple averaging instead of Krum
-        aggregated = sum(updates) / len(updates)
+        #Krum aggregation that selects a client update that is closest to the majority of other updates, which filters out malicious outliers
+        aggregated = krum_aggregation(updates)
         
         if dp_enabled:
             differentially_private_aggregation(aggregated, dp_clip, dp_std)
@@ -132,11 +133,10 @@ def main():
         
         reputation.update([(cid, updates[cid]) for cid in range(num_clients)], metrics['accuracy'])
         
-        if metrics['accuracy'] < 0.4:
-            print(f"WARNING: Validation score dropped below 0.4 at round {rnd+1}.")
+        monitor_performance(rnd,metrics['accuracy'],monitor_threshold)
     
     os.makedirs(config['logging']['output_dir'], exist_ok=True)
-    log_path = os.path.join(config['logging']['output_dir'], 'metrics.csv')
+    log_path = os.path.join(config['logging']['output_dir'], 'metrics','_',config['dataset'],'.csv')
     pd.DataFrame(log).to_csv(log_path, index=False)
     print(f"Saved metrics to {log_path}")
 
