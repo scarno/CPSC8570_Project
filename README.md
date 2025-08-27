@@ -1,6 +1,13 @@
 # CPSC8570_Project
 FL Project improvements for CPSC 8570
 
+# Contributers
+Avalee Jacobs
+Serena McAlhany
+Todd Schuff
+Daniel Scarnavack
+Andrew Poe
+
 # DataPoisoning_FL_Improved
 
 This repository is an enhanced implementation of federated learning under data poisoning attacks. It builds on prior work by incorporating these improvements:
