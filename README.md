@@ -2,11 +2,11 @@
 FL Project improvements for CPSC 8570
 
 # Contributers
-Avalee Jacobs
-Serena McAlhany
-Todd Schuff
-Daniel Scarnavack
-Andrew Poe
+-Avalee Jacobs
+-Serena McAlhany
+-Todd Schuff
+-Daniel Scarnavack
+-Andrew Poe
 
 # DataPoisoning_FL_Improved
 
